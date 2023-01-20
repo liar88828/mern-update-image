@@ -4,13 +4,14 @@ import postRoute from './route/posts.mjs'
 // import likeRoute from './route/likes.mjs'
 import authRoute from './route/auth.mjs'
 import commentsRoute from './route/comments.mjs'
+import cors from 'cors'
 
 const app = express()
 const port = 5000
 
 // middleware
 app.use(express.json())
-
+app.use(cors())
 
 
 app.use('/api/users', userRoute)
