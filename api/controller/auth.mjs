@@ -2,6 +2,8 @@ import {db} from "../connect.mjs";
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
+const accessToken = 'accessToken'
+
 export const register = (req, res) => {
 	//check user
 	const q = `SELECT username
@@ -47,14 +49,16 @@ export const login = (req, res) => {
 		if (!checkPassword) return res.send(400).json('wrong password or useranem')
 		const token = jwt.sign({id: data[0].id}, 'secretkey')
 		const {password, ...others} = data[0]
-		res.cookie('accessToken', token, {
+		res.cookie(accessToken, token, {
 			httpOnly: true,
 		}).status(200).json(others)
 	})
 	// res.send('login ')
 }
 
-
 export const logout = (req, res) => {
-	res.send('logout ')
+	res.clearCookie('accessToken', {
+		secure: true,
+		sameSite: 'none'
+	}).status(200).json('User has logout')
 }
