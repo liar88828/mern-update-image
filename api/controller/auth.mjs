@@ -1,16 +1,12 @@
 import {db} from "../connect.mjs";
 import bcryptjs from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
-export const login = (req, res) => {
-	res.send('login ')
-}
 export const register = (req, res) => {
-
 	//check user
-	const q = `SELECT *
+	const q = `SELECT username
              FROM users
              WHERE username = ?`
-
 
 	db.query(q, [req.body.username], (err, data) => {
 		if (err) return res
@@ -29,21 +25,35 @@ export const register = (req, res) => {
 		//insert User
 		const q = "INSERT INTO social.users (username, email, password, name) VALUES (?)"
 		const rb = req.body
-		const values = [
-			rb.username,
-			rb.email,
-			Hashpassword,
-			rb.name]
-		db.query(q, [values], (err, data) => {
+		const values = [rb.username, rb.email, Hashpassword, rb.name]
+		db.query(q, [values], (err) => {
 			if (err) return res
 					.status(500)
 					.json(err)
 			return res.status(200).json('insert be create')
 		})
 	})
-
-
 }
+
+export const login = (req, res) => {
+	const q = "SELECT * FROM users WHERE username = ?"
+	db.query(q, [req.body.username], (err, data) => {
+		if (err) return res
+				.status(500).json(err)
+		if (data.length === 0) return res
+				.status(404).json('user not found')
+
+		const checkPassword = bcryptjs.compareSync(req.body.password, data[0].password)
+		if (!checkPassword) return res.send(400).json('wrong password or useranem')
+		const token = jwt.sign({id: data[0].id}, 'secretkey')
+		const {password, ...others} = data[0]
+		res.cookie('accessToken', token, {
+			httpOnly: true,
+		}).status(200).json(others)
+	})
+	// res.send('login ')
+}
+
 
 export const logout = (req, res) => {
 	res.send('logout ')
