@@ -16,6 +16,7 @@ const Register = () => {
 	const handleChange = (e) => {
 		setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}))
 	}
+
 	console.log(inputs)
 
 
