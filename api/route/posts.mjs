@@ -1,10 +1,11 @@
 import express from "express";
-import {getPost} from "../controller/posts.mjs";
+import {getPosts,postPost} from "../controller/posts.mjs";
 
 const router = express.Router()
 
 
-router.get('/', getPost)
+router.get('/', getPosts)
+router.post('/', postPost)
 
 
 export default router
