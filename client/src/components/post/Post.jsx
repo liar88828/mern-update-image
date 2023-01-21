@@ -6,16 +6,25 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {Link} from "react-router-dom";
 import Comments from "../comments/Comments";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import moment from 'moment'
+import {useQuery} from "@tanstack/react-query";
+import {makeRequest} from "../../axios";
+import {AuthContext} from "../../context/authContext";
 
 const Post = ({post}) => {
 	const [commentOpen, setCommentOpen] = useState(false);
+	const {currentUser} = useContext(AuthContext);
 
-	//TEMPORARY
-	// const liked = false;
-	const liked = true;
+	const {isLoading, error, data} = useQuery(['likes', post.id], () => // jangan di kasih kurung kurawal {}
+			makeRequest.get('/likes?postId=' + post.id).then((res) => {
+				return res.data
+			}))
 
+	console.log(data)
+	const handleLike = () => {
+
+	}
 	return (
 			<div className="post">
 				<div className="container">
@@ -40,10 +49,21 @@ const Post = ({post}) => {
 					</div>
 					<div className="info">
 						<div className="item">
-							{liked ? <FavoriteOutlinedIcon style={{color: 'red'}}/> : <FavoriteBorderOutlinedIcon/>}
-							12 Likes
+							{isLoading ? ("loading") // harus dengan loading
+									: data.includes(currentUser.id) ? (
+											<FavoriteOutlinedIcon style={{color: 'red'}}
+											                      onClick={handleLike}
+											/>
+									) : (
+											<FavoriteBorderOutlinedIcon
+													onClick={handleLike}
+
+											/>
+									)}
+							{data?.length} Likes {/* harus denganan tanda ?*/}
 						</div>
-						<div className="item" onClick={() => setCommentOpen(!commentOpen)}>
+						<div className="item"
+						     onClick={() => setCommentOpen(!commentOpen)}>
 							<TextsmsOutlinedIcon/>
 							12 Comments
 						</div>

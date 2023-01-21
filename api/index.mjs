@@ -1,7 +1,7 @@
 import express from 'express'
 import userRoute from './route/users.mjs'
 import postRoute from './route/posts.mjs'
-// import likeRoute from './route/likes.mjs'
+import likeRoute from './route/likes.mjs'
 import authRoute from './route/auth.mjs'
 import commentsRoute from './route/comments.mjs'
 import cors from 'cors'
@@ -39,7 +39,7 @@ app.post('/api/upload',
 
 app.use('/api/users', userRoute)
 app.use('/api/posts', postRoute)
-// app.use('/api/like', likeRoute)
+app.use('/api/likes', likeRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/comments', commentsRoute)
 

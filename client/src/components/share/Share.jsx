@@ -60,7 +60,7 @@ const Share = () => {
 
 						</div>
 						<div className="right">
-							{file && <img className={'file'} alt={'image'} src={URL.createObjectURL(file)}/>}
+							{file && <img className={'file'} alt={currentUser.name} src={URL.createObjectURL(file)}/>}
 						</div>
 					</div>
 					<hr/>
@@ -71,16 +71,16 @@ const Share = () => {
 							       onChange={e => setFile(e.target.files[0])}/>
 							<label htmlFor="file">
 								<div className="item">
-									<img src={Image} alt="image"/>
+									<img src={Image} alt={currentUser.name}/>
 									<span>Add Image</span>
 								</div>
 							</label>
 							<div className="item">
-								<img src={Map} alt="image"/>
+								<img src={Map} alt={currentUser.name}/>
 								<span>Add Place</span>
 							</div>
 							<div className="item">
-								<img src={Friend} alt="image"/>
+								<img src={Friend} alt={currentUser.name}/>
 								<span>Tag Friends</span>
 							</div>
 						</div>

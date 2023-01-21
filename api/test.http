@@ -36,3 +36,8 @@ Content-Type: application/json
 ####
 GET http://localhost:5000/api/comments
 Content-Type: application/json
+
+####
+GET http://localhost:5000/api/likes
+Content-Type: application/json
+
