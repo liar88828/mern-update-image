@@ -1,10 +1,10 @@
 import express from "express";
-import {getUser} from "../controller/users.mjs";
+import {getComments} from "../controller/comments.mjs";
 
 const router = express.Router()
 
 
-router.get('/', )
+router.get('/', getComments)
 
 
 export default router

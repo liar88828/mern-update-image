@@ -33,3 +33,6 @@ Content-Type: application/json
 "descrp": "hahaha"
 }
 
+####
+GET http://localhost:5000/api/comments
+Content-Type: application/json

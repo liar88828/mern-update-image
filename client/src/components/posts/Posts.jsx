@@ -10,7 +10,7 @@ const Posts = () => {
 			}))
 
 
-	console.log(data)
+	// console.log(data)
 
 	return <div className="posts">
 		{error ? "Somting that wrong" :
