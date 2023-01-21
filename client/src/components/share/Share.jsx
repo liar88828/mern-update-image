@@ -22,7 +22,6 @@ const Share = () => {
 	})
 
 	const upload = async () => {
-
 		try {
 			const formData = new FormData()
 			formData.append('file', file)

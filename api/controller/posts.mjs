@@ -22,7 +22,6 @@ export const getPosts = (req, res) => {
 }
 
 export const postPost = (req, res) => {
-
 	const token = req.cookies.accessToken;
 	if (!token) return res.status(401).json('not login')
 	jwt.verify(token,

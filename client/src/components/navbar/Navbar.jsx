@@ -15,7 +15,7 @@ import { AuthContext } from "../../context/authContext";
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser } = useContext(AuthContext);
-
+console.log(currentUser)
   return (
     <div className="navbar">
       <div className="left">
@@ -40,8 +40,8 @@ const Navbar = () => {
         <NotificationsOutlinedIcon />
         <div className="user">
           <img
-            src={currentUser.profilePic}
-            alt=""
+            src={currentUser.profile_pic}
+            alt={currentUser.name}
           />
           <span>{currentUser.name}</span>
         </div>
