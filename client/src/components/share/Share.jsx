@@ -12,12 +12,12 @@ const Share = () => {
 	const [descrp, setDesc] = useState(''); //descrp harus sama dengan database
 	const {currentUser} = useContext(AuthContext)
 
-	const queryClient = useQueryClient()
-	const mutaion = useMutation((newPost) => {
+	const queryClient = useQueryClient();
+	const mutation = useMutation((newPost) => {
 		return makeRequest.post('/posts', newPost)
 	}, {
 		onSuccess: () => {
-			queryClient.invalidateQueries(['posts'])
+			queryClient.invalidateQueries(["posts"]);
 		}
 	})
 
@@ -37,22 +37,32 @@ const Share = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		let imgUrl = ''
-		if (file) imgUrl= await upload()
- 		mutaion.mutate({descrp, img: imgUrl})
+		if (file) imgUrl = await upload()
+		mutation.mutate({descrp, img: imgUrl})
+		setFile(null)
+		setDesc('')
 	}
 
 	return (
 			<div className="share">
 				<div className="container">
 					<div className="top">
-						<img
-								src={currentUser.profilePic}
-								alt=""
-						/>
-						<input type="text"
-						       placeholder={`What's on your mind ${currentUser.name}?`}
-						       onChange={e => setDesc(e.target.value)}/>
+						<div className="left">
 
+							<img
+									src={currentUser.profilePic}
+									alt=""
+							/>
+							<input type="text"
+							       value={descrp}
+							       placeholder={`What's on your mind ${currentUser.name}?`}
+							       onChange={e => setDesc(e.target.value)}/>
+
+
+						</div>
+						<div className="right">
+							{file && <img className={'file'} alt={'image'} src={URL.createObjectURL(file)}/>}
+						</div>
 					</div>
 					<hr/>
 					<div className="bottom">
