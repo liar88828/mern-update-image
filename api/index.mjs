@@ -4,6 +4,7 @@ import postRoute from './route/posts.mjs'
 import likeRoute from './route/likes.mjs'
 import authRoute from './route/auth.mjs'
 import commentsRoute from './route/comments.mjs'
+import relationshipRoutes from './route/relasionship.mjs'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import multer from 'multer'
@@ -42,5 +43,5 @@ app.use('/api/posts', postRoute)
 app.use('/api/likes', likeRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/comments', commentsRoute)
-
+app.use("/api/relationships", relationshipRoutes);
 app.listen(port, () => console.log('run in ' + port))
