@@ -19,7 +19,6 @@ import Update from "../../components/update/Update";
 const Profile = () => {
 	const {currentUser} = useContext(AuthContext)
 	const userId = parseInt(useLocation().pathname.split('/')[2])
-
 	const [openUpdate, setOpenUpdate] = useState(false)
 
 
@@ -48,7 +47,7 @@ const Profile = () => {
 	const handleFollow = () => {
 		mutation.mutate(relationshipData.includes(currentUser.id))
 	}
-
+	console.log(userId)
 	return (
 			<div className="profile">
 				{isLoading ? 'loading' : // harus di kasih loading
@@ -98,7 +97,8 @@ const Profile = () => {
 										<MoreVertIcon/>
 									</div>
 								</div>
-								<Posts userId={userId}/>
+								<Posts userId={userId} key={userId} />
+
 							</div>
 						</>}
 				{openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data}/>}

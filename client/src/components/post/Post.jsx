@@ -13,6 +13,7 @@ import {makeRequest} from "../../axios";
 import {AuthContext} from "../../context/authContext";
 
 const Post = ({post}) => {
+	// console.log(post)
 	const [commentOpen, setCommentOpen] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -47,7 +48,6 @@ const Post = ({post}) => {
 	);
 
 
-
 	const handleLike = () => {
 		mutation.mutate(data.includes(currentUser.id))
 	}
@@ -61,7 +61,7 @@ const Post = ({post}) => {
 		<div className="container">
 			<div className="user">
 				<div className="userInfo">
-					<img src={post.profile_pic} alt=""/>
+					<img src={"/upload/" + post.profile_pic} alt={post.username}/>
 					<div className="details">
 						<Link
 								to={`/profile/${post.userId}`}
@@ -72,22 +72,26 @@ const Post = ({post}) => {
 						<span className="date">{moment(post.createAt).fromNow()}</span>
 					</div>
 				</div>
-				<MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)}/>
-				{menuOpen && <button onClick={handleDelete}>delete</button>}
+				<MoreHorizIcon
+						onClick={() => setMenuOpen(!menuOpen)}/>
+				{menuOpen
+						&& post.userId === currentUser.id
+						&& (<button onClick={handleDelete}>delete</button>)}
 			</div>
 			<div className="content">
 				<p>{post.descrp}</p>
-				<img src={'./upload/' + post.img} alt=""/>
+				<img src={'/upload/' + post.img} alt={post.username}/>
 			</div>
 			<div className="info">
 				<div className="item">
-					{isLoading ? ("loading") // harus dengan loading
-							: data.includes(currentUser.id) ? (<FavoriteOutlinedIcon style={{color: 'red'}}
-							                                                         onClick={handleLike}
-							/>) : (<FavoriteBorderOutlinedIcon
-									onClick={handleLike}
-
-							/>)}
+					{isLoading
+							? ("loading") // harus dengan loading
+							: data.includes(currentUser.id)
+									? (<FavoriteOutlinedIcon style={{color: 'red'}}
+									                         onClick={handleLike}/>)
+									: (<FavoriteBorderOutlinedIcon
+											onClick={handleLike}
+									/>)}
 					{data?.length} Likes {/* harus denganan tanda ?*/}
 				</div>
 				<div className="item"
