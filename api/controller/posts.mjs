@@ -9,15 +9,13 @@ export const getPosts = (req, res) => {
 	if (!token) return res.status(401).json('not login')
 	jwt.verify(token, 'secretkey', (err, userInfo) => {
 		if (err) return res.status(403).json('token is not valid')
-		const q = userId
+		const q = userId !== 'undefined'
 				? `SELECT p.*, name, profile_pic
            FROM social.post p
                     JOIN users u on u.id = p.userId
            WHERE p.userId = ?
            ORDER BY p.createAt DESC
 				`
-
-
 				: `SELECT p.*, name, profile_pic
            FROM post p
                     JOIN users u ON u.id = p.userId
@@ -27,7 +25,6 @@ export const getPosts = (req, res) => {
            ORDER BY createAt desc `; // AND r.followUserId =?// hanya untuk only saja
 
 		const values =
-
 				userId !== 'undefined'
 						? [userId] : [userInfo.id, userInfo.id]
 
