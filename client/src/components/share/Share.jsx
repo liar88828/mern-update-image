@@ -6,12 +6,14 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../../context/authContext";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {makeRequest} from "../../axios";
+import {useNavigate} from "react-router-dom";
+
 
 const Share = () => {
 	const [file, setFile] = useState(null);
 	const [descrp, setDesc] = useState(''); //descrp harus sama dengan database
 	const {currentUser} = useContext(AuthContext)
-
+	const navigation = useNavigate()
 	const queryClient = useQueryClient();
 	const mutation = useMutation((newPost) => {
 		return makeRequest.post('/posts', newPost)
@@ -46,10 +48,12 @@ const Share = () => {
 			<div className="share">
 				<div className="container">
 					<div className="top">
-						<div className="left">
+						<div className="left"
+						     // onClick={()=> navigation("/profile/" + currentUser.id)}
+						>
 
 							<img
-									src={currentUser.profilePic}
+									src={currentUser.profile_pic}
 									alt=""
 							/>
 							<input type="text"

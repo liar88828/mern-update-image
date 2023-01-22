@@ -21,7 +21,6 @@ const Post = ({post}) => {
 				return res.data
 			}))
 
-
 	const queryClient = useQueryClient();
 	const mutation = useMutation((liked) => {
 		if (liked) return makeRequest.delete('/likes?postId=' + post.id)
@@ -40,7 +39,7 @@ const Post = ({post}) => {
 				<div className="container">
 					<div className="user">
 						<div className="userInfo">
-							<img src={post.profilePic} alt=""/>
+							<img src={post.profile_pic} alt=""/>
 							<div className="details">
 								<Link
 										to={`/profile/${post.userId}`}
