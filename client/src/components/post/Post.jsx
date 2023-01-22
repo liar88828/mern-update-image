@@ -14,6 +14,8 @@ import {AuthContext} from "../../context/authContext";
 
 const Post = ({post}) => {
 	const [commentOpen, setCommentOpen] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
+
 	const {currentUser} = useContext(AuthContext);
 
 	const {isLoading, error, data} = useQuery(['likes', post.id], () => // jangan di kasih kurung kurawal {}
@@ -22,6 +24,7 @@ const Post = ({post}) => {
 			}))
 
 	const queryClient = useQueryClient();
+
 	const mutation = useMutation((liked) => {
 		if (liked) return makeRequest.delete('/likes?postId=' + post.id)
 		return makeRequest.post('/likes', {postId: post.id})
@@ -31,60 +34,75 @@ const Post = ({post}) => {
 		}
 	})
 
+	const deleteMutation = useMutation(
+			(postId) => {
+				return makeRequest.delete("/posts/" + postId);
+			},
+			{
+				onSuccess: () => {
+					// Invalidate and refetch
+					queryClient.invalidateQueries(["posts"]);
+				},
+			}
+	);
+
+
+
 	const handleLike = () => {
 		mutation.mutate(data.includes(currentUser.id))
 	}
-	return (
-			<div className="post">
-				<div className="container">
-					<div className="user">
-						<div className="userInfo">
-							<img src={post.profile_pic} alt=""/>
-							<div className="details">
-								<Link
-										to={`/profile/${post.userId}`}
-										style={{textDecoration: "none", color: "inherit"}}
-								>
-									<span className="name">{post.name}</span>
-								</Link>
-								<span className="date">{moment(post.createAt).fromNow()}</span>
-							</div>
-						</div>
-						<MoreHorizIcon/>
-					</div>
-					<div className="content">
-						<p>{post.descrp}</p>
-						<img src={'./upload/' + post.img} alt=""/>
-					</div>
-					<div className="info">
-						<div className="item">
-							{isLoading ? ("loading") // harus dengan loading
-									: data.includes(currentUser.id) ? (
-											<FavoriteOutlinedIcon style={{color: 'red'}}
-											                      onClick={handleLike}
-											/>
-									) : (
-											<FavoriteBorderOutlinedIcon
-													onClick={handleLike}
 
-											/>
-									)}
-							{data?.length} Likes {/* harus denganan tanda ?*/}
-						</div>
-						<div className="item"
-						     onClick={() => setCommentOpen(!commentOpen)}>
-							<TextsmsOutlinedIcon/>
-							12 Comments
-						</div>
-						<div className="item">
-							<ShareOutlinedIcon/>
-							Share
-						</div>
+	const handleDelete = () => {
+		deleteMutation.mutate(post.id);
+	};
+
+
+	return (<div className="post">
+		<div className="container">
+			<div className="user">
+				<div className="userInfo">
+					<img src={post.profile_pic} alt=""/>
+					<div className="details">
+						<Link
+								to={`/profile/${post.userId}`}
+								style={{textDecoration: "none", color: "inherit"}}
+						>
+							<span className="name">{post.name}</span>
+						</Link>
+						<span className="date">{moment(post.createAt).fromNow()}</span>
 					</div>
-					{commentOpen && <Comments postId={post.id}/>}
+				</div>
+				<MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)}/>
+				{menuOpen && <button onClick={handleDelete}>delete</button>}
+			</div>
+			<div className="content">
+				<p>{post.descrp}</p>
+				<img src={'./upload/' + post.img} alt=""/>
+			</div>
+			<div className="info">
+				<div className="item">
+					{isLoading ? ("loading") // harus dengan loading
+							: data.includes(currentUser.id) ? (<FavoriteOutlinedIcon style={{color: 'red'}}
+							                                                         onClick={handleLike}
+							/>) : (<FavoriteBorderOutlinedIcon
+									onClick={handleLike}
+
+							/>)}
+					{data?.length} Likes {/* harus denganan tanda ?*/}
+				</div>
+				<div className="item"
+				     onClick={() => setCommentOpen(!commentOpen)}>
+					<TextsmsOutlinedIcon/>
+					12 Comments
+				</div>
+				<div className="item">
+					<ShareOutlinedIcon/>
+					Share
 				</div>
 			</div>
-	);
+			{commentOpen && <Comments postId={post.id}/>}
+		</div>
+	</div>);
 };
 
 export default Post;
