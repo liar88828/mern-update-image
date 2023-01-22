@@ -12,12 +12,16 @@ import Posts from "../../components/posts/Posts"
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {makeRequest} from "../../axios";
 import {useLocation} from "react-router-dom";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {AuthContext} from "../../context/authContext";
+import Update from "../../components/update/Update";
 
 const Profile = () => {
 	const {currentUser} = useContext(AuthContext)
 	const userId = parseInt(useLocation().pathname.split('/')[2])
+
+	const [openUpdate, setOpenUpdate] = useState(false)
+
 
 	const {isLoading, error, data} = useQuery(['user'], () => // jangan di kasih kurung kurawal {}
 			makeRequest.get('/users/find/' + userId).then((res) => {
@@ -51,12 +55,12 @@ const Profile = () => {
 						<>
 							<div className="images">
 								<img
-										src={data.cover_pic}
+										src={'/upload/'+data.cover_pic}
 										alt={data.username}
 										className="cover"
 								/>
 								<img
-										src={data.profile_pic}
+										src={'/upload/'+data.profile_pic}
 										alt={data.username}
 										className="profilePic"
 								/>
@@ -83,7 +87,7 @@ const Profile = () => {
 										{relasionLoading
 												? 'loading'
 												: userId === currentUser.id
-														? (<button>update</button>)
+														? (<button onClick={()=>setOpenUpdate(true)}>update</button>)
 														: (<button onClick={handleFollow}>
 															{relationshipData.includes(currentUser.id)
 																	? 'follonwing'
@@ -97,6 +101,7 @@ const Profile = () => {
 								<Posts userId={userId}/>
 							</div>
 						</>}
+				{openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data}/>}
 			</div>
 	);
 };
