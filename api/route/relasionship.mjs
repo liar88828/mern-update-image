@@ -1,8 +1,7 @@
 import express from "express";
-import {getRelasionShip,deleteRelasionShip,postRelasionShip} from "../controller/relasionship.mjs";
+import {getRelasionShip, deleteRelasionShip, postRelasionShip} from "../controller/relasionship.mjs";
 
 const router = express.Router()
-
 
 router.get('/', getRelasionShip)
 router.post('/', postRelasionShip)

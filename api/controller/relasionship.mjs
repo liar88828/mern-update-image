@@ -1,6 +1,5 @@
 import {db} from "../connect.mjs";
 import jwt from "jsonwebtoken";
-import moment from "moment/moment.js";
 
 export const getRelasionShip = async (req, res) => {
 
@@ -16,7 +15,7 @@ export const getRelasionShip = async (req, res) => {
 	})
 }
 
-export const postRelasionShip = async (req, res) => {
+export const postRelasionShip = (req, res) => {
 
 	const token = req.cookies.accessToken;
 	if (!token) return res.status(401).json('not login')
@@ -24,20 +23,21 @@ export const postRelasionShip = async (req, res) => {
 			'secretkey',
 			(err, userInfo) => {
 				if (err) return res.status(403).json('token is not valid')
-				const q = "INSERT INTO social.like_post (likeUserId, likePostId) VALUES (?)";
-				const rb = req.body
-				const values = [
-					userInfo.id,
-					rb.postId
-				]
-				db.query(q, [values], (err) => {
+
+				const q = `INSERT INTO social.relationships (followUserId, followedUserId)
+                   VALUES (?)`;
+
+				db.query(q, [[userInfo.id, req.body.userId]], (err, data) => {
 					if (err) return res.status(500).json(err)
-					return res.status(200).json('post has been like')
+					return res.status(200).json('Following')
+
+
 				})
+				console.log(userInfo.id, req.body.userId)
 			})
 
-
 }
+
 export const deleteRelasionShip = async (req, res) => {
 	const token = req.cookies.accessToken;
 	if (!token) return res.status(401).json('not login')
@@ -46,12 +46,12 @@ export const deleteRelasionShip = async (req, res) => {
 			(err, userInfo) => {
 				if (err) return res.status(403).json('token is not valid')
 				const q = `DELETE
-                   FROM social.like_post
-                   WHERE likeUserId = ?
-                     AND likePostId = ?`;
-				db.query(q, [userInfo.id, req.query.postId], (err) => {
+                   FROM social.relationships
+                   WHERE followUserId = ?
+                     AND followedUserId = ?`;
+				db.query(q, [userInfo.id, req.query.userId], (err) => {
 					if (err) return res.status(500).json(err)
-					return res.status(200).json('post has been dilike')
+					return res.status(200).json('unFollow  has been dilike')
 				})
 			})
 

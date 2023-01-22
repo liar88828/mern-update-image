@@ -30,10 +30,19 @@ const Profile = () => {
 				return res.data
 			}))
 
-	console.log(relationshipData)
-	// console.log(userId)
+	const queryClient = useQueryClient();
+	const mutation = useMutation((following) => {
+		// console.log(following)
+		if (following) return makeRequest.delete('/relationships?userId=' + userId)
+		return makeRequest.post('/relationships', {userId})
+	}, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(["relationship"]);
+		}
+	})
 
 	const handleFollow = () => {
+		mutation.mutate(relationshipData.includes(currentUser.id))
 	}
 
 	return (
@@ -85,7 +94,7 @@ const Profile = () => {
 										<MoreVertIcon/>
 									</div>
 								</div>
-								<Posts/>
+								<Posts userId={userId}/>
 							</div>
 						</>}
 			</div>
