@@ -10,9 +10,12 @@ export const AuthContextProvider = ({children}) => {
 
 	const login = async (inputs) => {
 		//TO DO
-		const res = await axios.post('http://localhost:5000/api/auth/login',
-				inputs, {withCredentials: true})
-		setCurrentUser(res.data)
+		const res = await axios.post(
+'http://localhost:5000/api/auth/login',		
+inputs, 
+{withCredentials: true} 
+							)
+		setCurrentUser(res.data) // untuk menyimpan token
 	};
 
 	useEffect(() => {

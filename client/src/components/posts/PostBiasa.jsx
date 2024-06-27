@@ -3,16 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import Post from "../post/Post";
 
-const Posts = ({ userId }) => {
-  // console.log(userId)
-
+const PostsBiasa = () => {
   const { isLoading, error, data } = useQuery(["posts"], () =>
     // jangan di kasih kurung kurawal {}
-    makeRequest.get("/posts?userId=" + userId).then((res) => {
+    makeRequest.get("/posts/biasa").then((res) => {
       return res.data;
     })
   );
-  console.log(userId);
+
+  console.log(data);
 
   return (
     <div className="posts">
@@ -20,11 +19,9 @@ const Posts = ({ userId }) => {
         ? "Somting that wrong"
         : isLoading
         ? "loading"
-        : data.map((post) => {
-            return <Post post={post} key={post.id} />;
-          })}
+        : data.map((post) => <Post post={post} key={post.id} />)}
     </div>
   );
 };
 
-export default Posts;
+export default PostsBiasa;
